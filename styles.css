@@ -251,30 +251,65 @@ body.no-scroll{overflow:hidden;}
 .res-list svg{width:15px;height:15px;flex-shrink:0;margin-top:0.2rem;color:var(--gold);}
 .residential-cta{margin-top:2.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
 
-/* ============================= SCRAPBOOK GALLERY (residential) ============================= */
-.sb-pair{display:flex;gap:0.4rem;border-radius:8px;overflow:hidden;aspect-ratio:4/3;}
-.sb-half{position:relative;flex:1;overflow:hidden;}
-.sb-half img{width:100%;height:100%;object-fit:cover;display:block;}
-.sb-half .sb-tag{position:absolute;bottom:0.5rem;left:0.5rem;}
-.scrapbook-gallery{margin-top:4rem;display:flex;flex-direction:column;gap:2rem;}
-.sb-row{display:flex;gap:1.25rem;align-items:flex-start;}
-.sb-row-solo{justify-content:center;}
-.sb-row-trio{align-items:center;}
-.sb-item{display:flex;flex-direction:column;gap:0.6rem;}
-.sb-item img{width:100%;display:block;border-radius:8px;object-fit:cover;}
-.sb-wide img{aspect-ratio:16/7;border-radius:8px;}
-.sb-large{flex:1.5;}
-.sb-large img{aspect-ratio:1/1;max-height:420px;}
-.sb-small{flex:1;}
-.sb-small img{aspect-ratio:3/4;}
-.sb-medium{flex:1;}
-.sb-medium img{aspect-ratio:3/4;}
-.sb-medium-wide img{aspect-ratio:3/4;}
-.sb-caption{font-family:var(--font-body);font-size:0.9rem;line-height:1.5;color:var(--mist);margin:0;}
-.sb-caption-top{order:-1;}
-.sb-tag{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-bright);background:rgba(214,66,125,0.12);padding:0.25rem 0.7rem;border-radius:20px;align-self:flex-start;}
-.sb-middle-caption{flex:0.6;text-align:center;color:var(--mist);font-family:var(--font-body);font-size:0.9rem;line-height:1.6;padding:1rem 0.5rem;}
+/* ============================= RESIDENTIAL SCRAPBOOK SECTION ============================= */
+.res-scrapbook-section{position:relative;overflow:hidden;}
+.res-doodle-layer{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+
+/* The grid: masonry-style using CSS columns */
+.rsb-grid{
+  columns:2;
+  column-gap:1.5rem;
+}
+/* Each card is fully self-contained — image + caption never separate */
+.rsb-card{
+  break-inside:avoid;
+  display:flex;
+  flex-direction:column;
+  gap:0.6rem;
+  margin-bottom:1.5rem;
+}
+.rsb-img-wrap{border-radius:8px;overflow:hidden;display:block;}
+.rsb-img-wrap img{width:100%;display:block;object-fit:cover;}
+/* sizing variants — control the image height via aspect-ratio on the wrapper */
+.rsb-full .rsb-img-wrap img{aspect-ratio:16/7;}
+.rsb-wide .rsb-img-wrap img{aspect-ratio:4/3;}
+.rsb-portrait .rsb-img-wrap img{aspect-ratio:3/4;}
+.rsb-tall .rsb-img-wrap img{aspect-ratio:4/3;}
+/* full-width cards span both columns */
+.rsb-full{column-span:all;break-inside:avoid;}
+/* Before/After pair inside a card */
+.rsb-pair-wrap{display:flex!important;gap:0.35rem;}
+.rsb-half{position:relative;flex:1;overflow:hidden;}
+.rsb-half img{width:100%;height:100%;object-fit:cover;display:block;}
+/* Caption — always the sibling directly next to the image wrapper */
+.rsb-caption{
+  font-family:var(--font-body);
+  font-size:0.88rem;
+  line-height:1.5;
+  color:var(--mist);
+  margin:0;
+}
+.rsb-caption-above{order:-1;}
+/* Badge labels */
+.rsb-badge{
+  position:absolute;
+  bottom:0.5rem;left:0.5rem;
+  font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.09em;text-transform:uppercase;
+  color:var(--gold-bright);background:rgba(11,13,18,0.72);
+  padding:0.22rem 0.6rem;border-radius:20px;
+  backdrop-filter:blur(4px);
+}
+.rsb-badge-top{
+  position:relative;
+  font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.09em;text-transform:uppercase;
+  color:var(--gold-bright);background:rgba(214,66,125,0.14);
+  padding:0.25rem 0.7rem;border-radius:20px;
+  align-self:flex-start;order:-2;
+}
+
+/* ============================= RESULTS GALLERY (legacy class, keep for safety) ============================= */
 .results-gallery{margin-top:4rem;padding-top:3rem;border-top:1px solid var(--line-dark);}
+
 
 /* ============================= VISIONARIES SCRAPBOOK BG DOODLES ============================= */
 .visionaries-section{position:relative;overflow:hidden;}
@@ -446,8 +481,8 @@ footer{background:var(--ink);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem;border-
   .services-grid{grid-template-columns:1fr;}
   .residential-grid{grid-template-columns:1fr;}
   .gallery-grid{grid-template-columns:1fr;}
-  .sb-row,.sb-row-trio{flex-direction:column;}
-  .sb-middle-caption{padding:0.25rem 0;}
+  .rsb-grid{columns:1;}
+  .rsb-full{column-span:unset;}
   .visionaries-grid{grid-template-columns:1fr;}
   .v-item.v-large,.v-item.v-small{grid-column:span 1;}
   .portfolio-grid{grid-template-columns:1fr;}
