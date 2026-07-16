@@ -401,7 +401,8 @@ img.scene-visual{width:100%;height:100%;object-fit:cover;display:block;}
 .portrait-caption{font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--mist);margin-top:1.25rem;text-align:center;}
 .about-copy p{color:var(--mist);font-size:1.02rem;line-height:1.75;margin-bottom:1.4rem;}
 .pull-quote{border-left:2px solid var(--gold);padding-left:1.5rem;margin-block:2rem;font-family:var(--font-display);font-size:clamp(1.4rem,2.4vw,1.9rem);line-height:1.25;color:#EDEEF0;text-transform:none;letter-spacing:0.01em;}
-.but-god{font-family:var(--font-display);font-size:clamp(2.4rem,6vw,3.4rem);color:var(--gold-bright);text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin:1.8rem 0 1.2rem;}
+.but-god-zone .but-god{font-family:var(--font-display);font-size:clamp(2.4rem,6vw,3.4rem);color:var(--gold-bright);text-transform:uppercase;letter-spacing:0.02em;line-height:1;margin:0;}
+.but-god-zone{display:inline-block;padding:0.9rem 1.3rem;margin:0.9rem -1.3rem 0.3rem;}
 .fish-icon{width:34px;height:19px;color:var(--gold);display:block;margin:0.2rem 0 0.4rem;}
 .signature-line{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.08em;color:var(--gold);text-transform:uppercase;}
 .signature-name{display:block;font-family:var(--font-script);font-size:2.6rem;line-height:1;color:var(--gold-bright);text-transform:none;letter-spacing:0.01em;}
@@ -507,16 +508,7 @@ footer{background:var(--ink);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem;border-
 /* ============================= PAGE HEADER (subpages) ============================= */
 .page-header{padding-top:clamp(7.5rem,15vw,10.5rem);padding-bottom:clamp(2.5rem,5vw,3.5rem);}
 
-/* ============================= SPARKLE ACCENTS (small inline accents) ============================= */
-.sparkle-zone{position:relative;}
-.sparkle-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
-.sparkle-zone > *:not(.sparkle-field){position:relative;z-index:1;}
-.sparkle{position:absolute;display:block;color:var(--gold-bright);opacity:0;animation:sparkle-twinkle ease-in-out infinite;}
-.sparkle svg{width:100%;height:100%;display:block;}
-@keyframes sparkle-twinkle{0%,100%{opacity:0;transform:scale(0.4);}50%{opacity:var(--sp-o,0.75);transform:scale(1);}}
-@media (prefers-reduced-motion:reduce){.sparkle{opacity:var(--sp-o,0.35);}}
-
-/* ============================= PARTICLE FIELD (hero, page-header, footer) ============================= */
+/* ============================= PARTICLE FIELD (hero, page-header, footer, But God. accent) ============================= */
 .particle-zone{position:relative;}
 .particle-zone > *:not(.particle-field){position:relative;z-index:1;}
 .particle-field{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}

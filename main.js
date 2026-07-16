@@ -3,29 +3,6 @@ document.querySelectorAll('.copy-year').forEach(el => {
   el.textContent = new Date().getFullYear();
 });
 
-// ---------- Sparkle accents (strategic "bling" zones, safe behind content) ----------
-const SPARKLE_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 1v7M12 16v7M1 12h7M16 12h7"/><circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none"/></svg>';
-document.querySelectorAll('.sparkle-zone').forEach(zone => {
-  const field = document.createElement('div');
-  field.className = 'sparkle-field';
-  const count = parseInt(zone.dataset.sparkleCount || '10', 10);
-  for(let i=0;i<count;i++){
-    const s = document.createElement('span');
-    s.className = 'sparkle';
-    s.innerHTML = SPARKLE_SVG;
-    const size = 5 + Math.random()*9;
-    s.style.width = size + 'px';
-    s.style.height = size + 'px';
-    s.style.left = Math.random()*100 + '%';
-    s.style.top = Math.random()*100 + '%';
-    s.style.setProperty('--sp-o', (0.35 + Math.random()*0.45).toFixed(2));
-    s.style.animationDuration = (2.2 + Math.random()*3.2) + 's';
-    s.style.animationDelay = (Math.random()*3.5) + 's';
-    field.appendChild(s);
-  }
-  zone.insertBefore(field, zone.firstChild);
-});
-
 // ---------- Header scroll state ----------
 const header = document.getElementById('siteHeader');
 const heroContent = document.getElementById('heroContent');
@@ -106,13 +83,15 @@ function initParticleField(canvas){
   const ctx = canvas.getContext('2d');
   let particles = [];
   let t = 0;
+  const minCount = parseInt(canvas.dataset.particleMin || '0', 10);
+  const starRatio = parseFloat(canvas.dataset.starRatio || '0.12');
   function resize(){
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
   }
   function initParticles(){
     particles = [];
-    const count = Math.min(90, Math.floor((canvas.width*canvas.height)/13000));
+    const count = Math.max(minCount, Math.min(90, Math.floor((canvas.width*canvas.height)/13000)));
     for(let i=0;i<count;i++){
       particles.push({
         x: Math.random()*canvas.width,
@@ -123,7 +102,7 @@ function initParticleField(canvas){
         baseO: Math.random()*0.45+0.15,
         twSpeed: Math.random()*0.02+0.006,
         twPhase: Math.random()*Math.PI*2,
-        star: Math.random() < 0.12
+        star: Math.random() < starRatio
       });
     }
   }
