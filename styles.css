@@ -71,20 +71,6 @@ section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-to
 .dark-section{background:var(--ink);color:#EDEEF0;}
 .light-section{background:var(--cream);color:#181A1F;}
 
-/* cut / transition labels */
-.scene-cut{
-  position:relative;
-  text-align:center;
-  font-family:var(--font-mono);
-  font-size:0.78rem;
-  letter-spacing:0.3em;
-  text-transform:uppercase;
-  padding-block:1.5rem;
-  z-index:2;
-}
-.scene-cut.on-dark{background:var(--ink);color:var(--gold);}
-.scene-cut.on-light{background:var(--cream);color:var(--gold-deep);}
-
 /* reveal animation */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,.8,.3,1),transform 0.8s cubic-bezier(.16,.8,.3,1);}
 .reveal.in-view{opacity:1;transform:translateY(0);}
