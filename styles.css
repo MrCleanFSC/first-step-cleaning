@@ -352,6 +352,12 @@ body.no-scroll{overflow:hidden;}
 .v-pair{display:flex;gap:0.5rem;border-radius:8px;overflow:hidden;aspect-ratio:3/2;}
 .v-pair img{width:50%;height:100%;object-fit:cover;display:block;}
 .v-caption{font-family:var(--font-body);font-size:0.92rem;line-height:1.55;color:var(--mist);margin-top:0.9rem;}
+
+/* Two-tone caption: first words white, last word/phrase in rose — used on residential scrapbook */
+.v-caption-twotone{font-family:var(--font-body);font-size:0.92rem;line-height:1.55;margin-top:0.9rem;color:#EDEEF0;}
+.v-caption-twotone .rose{color:var(--gold-bright);font-style:italic;}
+.v-overlay-caption-twotone{position:absolute;inset:auto 0 0 0;background:linear-gradient(to top,rgba(0,0,0,0.78) 10%,transparent 100%);padding:2.5rem 1.1rem 0.9rem;font-family:var(--font-body);font-size:0.88rem;line-height:1.5;color:#EDEEF0;}
+.v-overlay-caption-twotone .rose{color:var(--gold-bright);font-style:italic;}
 .v-caption strong{color:var(--gold-bright);font-weight:600;}
 .v-caption-top{margin-top:0;margin-bottom:0.9rem;}
 .v-overlay-caption{position:absolute;inset:auto 0 0 0;background:linear-gradient(to top,rgba(0,0,0,0.75) 10%,transparent 100%);padding:2.5rem 1.1rem 0.9rem;color:#EDEEF0;font-family:var(--font-body);font-size:0.88rem;line-height:1.5;}
