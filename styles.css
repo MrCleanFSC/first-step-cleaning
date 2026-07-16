@@ -507,7 +507,7 @@ footer{background:var(--ink);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem;border-
 /* ============================= PAGE HEADER (subpages) ============================= */
 .page-header{padding-top:clamp(7.5rem,15vw,10.5rem);padding-bottom:clamp(2.5rem,5vw,3.5rem);}
 
-/* ============================= SPARKLE ACCENTS ============================= */
+/* ============================= SPARKLE ACCENTS (small inline accents) ============================= */
 .sparkle-zone{position:relative;}
 .sparkle-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
 .sparkle-zone > *:not(.sparkle-field){position:relative;z-index:1;}
@@ -515,6 +515,11 @@ footer{background:var(--ink);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem;border-
 .sparkle svg{width:100%;height:100%;display:block;}
 @keyframes sparkle-twinkle{0%,100%{opacity:0;transform:scale(0.4);}50%{opacity:var(--sp-o,0.75);transform:scale(1);}}
 @media (prefers-reduced-motion:reduce){.sparkle{opacity:var(--sp-o,0.35);}}
+
+/* ============================= PARTICLE FIELD (hero, page-header, footer) ============================= */
+.particle-zone{position:relative;}
+.particle-zone > *:not(.particle-field){position:relative;z-index:1;}
+.particle-field{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
 /* ============================= ACTIVE NAV STATE ============================= */
 .nav-links a.active{opacity:1;color:var(--gold);}

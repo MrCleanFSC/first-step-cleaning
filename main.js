@@ -101,9 +101,8 @@ if('IntersectionObserver' in window){
   counters.forEach(el => cio.observe(el));
 }
 
-// ---------- Hero particle field (Home only — guarded, no-op elsewhere) ----------
-const canvas = document.getElementById('hero-particles');
-if(canvas && !reduceMotion){
+// ---------- Particle field (rising, twinkling dots — hero, page-header & footer zones) ----------
+function initParticleField(canvas){
   const ctx = canvas.getContext('2d');
   let particles = [];
   let t = 0;
@@ -167,9 +166,11 @@ if(canvas && !reduceMotion){
   }
   window.addEventListener('resize', () => { resize(); initParticles(); });
   resize(); initParticles(); animate();
-} else if(canvas){
-  canvas.style.display = 'none';
 }
+document.querySelectorAll('.particle-field').forEach(canvas => {
+  if(reduceMotion){ canvas.style.display = 'none'; }
+  else { initParticleField(canvas); }
+});
 
 // ---------- Shared form helper ----------
 const encodeFormData = (form) => new URLSearchParams(new FormData(form)).toString();
