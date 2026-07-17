@@ -8,9 +8,27 @@ const header = document.getElementById('siteHeader');
 const heroContent = document.getElementById('heroContent');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+let lastScrollY = window.scrollY;
+let headerHidden = false;
+const HEADER_HIDE_DEADZONE = 80; // don't hide until scrolled past the header's own height
+const HEADER_HIDE_DELTA = 4; // ignore tiny/jittery scroll deltas
+
 function onScroll(){
-  const y = window.scrollY;
+  const y = Math.max(window.scrollY, 0);
   header.classList.toggle('scrolled', y > 40);
+
+  if(mobileNav.classList.contains('open')){
+    headerHidden = false;
+  } else if(y <= HEADER_HIDE_DEADZONE){
+    headerHidden = false;
+  } else {
+    const delta = y - lastScrollY;
+    if(delta > HEADER_HIDE_DELTA) headerHidden = true;
+    else if(delta < -HEADER_HIDE_DELTA) headerHidden = false;
+  }
+  header.classList.toggle('header-hidden', headerHidden);
+  lastScrollY = y;
+
   if(heroContent && !reduceMotion && y < window.innerHeight){
     heroContent.style.transform = 'translateY(' + (y*0.22) + 'px)';
     heroContent.style.opacity = Math.max(1 - y/620, 0);
@@ -53,16 +71,17 @@ if('IntersectionObserver' in window){
 const counters = document.querySelectorAll('.stat-number');
 function animateCounter(el){
   const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
   const suffix = el.dataset.suffix || '';
-  if(reduceMotion){ el.textContent = target + suffix; return; }
+  if(reduceMotion){ el.textContent = prefix + target + suffix; return; }
   const duration = 1400;
   const start = performance.now();
   function tick(now){
     const progress = Math.min((now-start)/duration, 1);
     const eased = 1 - Math.pow(1-progress, 3);
-    el.textContent = Math.floor(eased*target) + suffix;
+    el.textContent = prefix + Math.floor(eased*target) + suffix;
     if(progress < 1) requestAnimationFrame(tick);
-    else el.textContent = target + suffix;
+    else el.textContent = prefix + target + suffix;
   }
   requestAnimationFrame(tick);
 }
