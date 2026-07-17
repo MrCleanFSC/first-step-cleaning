@@ -158,7 +158,7 @@ section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-to
 /* ============================= HEADER / NAV ============================= */
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:500;
-  padding-block:1.35rem;transition:background .4s ease,padding .4s ease,backdrop-filter .4s ease;
+  padding-block:1.35rem;transition:background .4s ease,padding .4s ease,backdrop-filter .4s ease,transform .35s ease;
 }
 .site-header::before{
   content:'';position:absolute;inset:0;background:rgba(11,13,18,0.0);backdrop-filter:blur(0px);
@@ -166,6 +166,8 @@ section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-to
 }
 .site-header.scrolled{padding-block:0.9rem;}
 .site-header.scrolled::before{background:rgba(11,13,18,0.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-dark);}
+/* Auto-hide on scroll down, reveal on scroll up — keeps the fixed header from sitting over page content mid-scroll */
+.site-header.header-hidden{transform:translateY(-110%);}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;}
 .brand{display:flex;align-items:flex-start;gap:0.65rem;}
 .brand-mark{width:36px;height:36px;color:var(--gold);flex-shrink:0;margin-top:0.15rem;}
@@ -517,6 +519,9 @@ footer .brand-mark{width:44px;height:44px;margin-top:0;}
   .nav-links{display:none;}
   .menu-toggle{display:flex;}
   .nav-cta .btn{display:none;}
+  /* Compact the scrolled mobile header further: drop the tagline and shrink the mark to match */
+  .site-header.scrolled .brand-tagline{display:none;}
+  .site-header.scrolled .brand-mark{width:40px;height:40px;}
 }
 @media (max-width:640px){
   .services-grid{grid-template-columns:1fr;}
