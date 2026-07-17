@@ -8,9 +8,27 @@ const header = document.getElementById('siteHeader');
 const heroContent = document.getElementById('heroContent');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+let lastScrollY = window.scrollY;
+let headerHidden = false;
+const HEADER_HIDE_DEADZONE = 80; // don't hide until scrolled past the header's own height
+const HEADER_HIDE_DELTA = 4; // ignore tiny/jittery scroll deltas
+
 function onScroll(){
-  const y = window.scrollY;
+  const y = Math.max(window.scrollY, 0);
   header.classList.toggle('scrolled', y > 40);
+
+  if(mobileNav.classList.contains('open')){
+    headerHidden = false;
+  } else if(y <= HEADER_HIDE_DEADZONE){
+    headerHidden = false;
+  } else {
+    const delta = y - lastScrollY;
+    if(delta > HEADER_HIDE_DELTA) headerHidden = true;
+    else if(delta < -HEADER_HIDE_DELTA) headerHidden = false;
+  }
+  header.classList.toggle('header-hidden', headerHidden);
+  lastScrollY = y;
+
   if(heroContent && !reduceMotion && y < window.innerHeight){
     heroContent.style.transform = 'translateY(' + (y*0.22) + 'px)';
     heroContent.style.opacity = Math.max(1 - y/620, 0);
