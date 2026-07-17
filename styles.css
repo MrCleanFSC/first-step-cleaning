@@ -169,6 +169,9 @@ section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-to
 .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;}
 .brand{display:flex;align-items:flex-start;gap:0.65rem;}
 .brand-mark{width:36px;height:36px;color:var(--gold);flex-shrink:0;margin-top:0.15rem;}
+/* Header wordmark: enlarged and centered beside the full brand-word text block (script + subtitle + tagline) */
+.site-header .brand{align-items:center;}
+.site-header .brand-mark{width:64px;height:64px;margin-top:0;}
 .brand-word{font-family:var(--font-display);font-size:1.35rem;letter-spacing:0.04em;line-height:0.9;}
 .brand-script{display:block;font-family:var(--font-script);font-size:1.75rem;line-height:1.05;color:var(--gold-bright);}
 .brand-word small{display:block;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.28em;color:var(--mist);margin-top:0.3rem;}
@@ -227,10 +230,18 @@ body.no-scroll{overflow:hidden;}
 @keyframes scrollPulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
 
 /* ============================= STATS ============================= */
-.stats{background:var(--navy);padding-block:clamp(3rem,6vw,4.5rem);border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);}
+.stats{background:var(--navy);padding-block:clamp(3rem,6vw,4.5rem);border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);overflow:hidden;}
+.stats::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 55% 75% at 12% 15%,rgba(214,66,125,0.12),transparent 60%),
+             radial-gradient(ellipse 50% 70% at 88% 95%,rgba(232,98,143,0.08),transparent 60%);
+}
+.stats-eyebrow{margin-bottom:1.75rem;}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
-.stat{text-align:left;border-left:1px solid var(--line-dark);padding-left:1.5rem;}
-.stat-number{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,3.6rem);color:var(--gold);line-height:1;}
+.stat{text-align:left;border-left:1px solid var(--line-dark);padding-left:1.5rem;transition:border-color .3s ease,transform .3s ease;}
+.stat:hover{border-color:var(--gold);transform:translateY(-3px);}
+.stat-number{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,3.6rem);color:var(--gold);line-height:1;transition:color .3s ease,text-shadow .3s ease;}
+.stat:hover .stat-number{color:var(--gold-bright);text-shadow:0 0 22px rgba(232,98,143,0.4);}
 .stat-label{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mist);margin-top:0.6rem;line-height:1.4;}
 
 /* ============================= SERVICES ============================= */
@@ -471,6 +482,9 @@ img.scene-visual{width:100%;height:100%;object-fit:cover;display:block;}
 /* ============================= FOOTER ============================= */
 footer{background:var(--ink);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem;border-top:1px solid var(--line-dark);}
 .footer-grid{display:grid;grid-template-columns:1.4fr 0.8fr 0.8fr 1fr;gap:2.5rem;margin-bottom:3rem;}
+/* Footer wordmark: enlarged in step with the header, scaled to its own shorter (no-tagline) text block */
+footer .brand{align-items:center;}
+footer .brand-mark{width:44px;height:44px;margin-top:0;}
 .footer-brand p{color:var(--mist);font-size:0.9rem;line-height:1.65;margin-top:1rem;max-width:280px;}
 .footer-col h4{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;}
 .footer-col ul li{margin-bottom:0.7rem;}

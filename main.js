@@ -53,16 +53,17 @@ if('IntersectionObserver' in window){
 const counters = document.querySelectorAll('.stat-number');
 function animateCounter(el){
   const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
   const suffix = el.dataset.suffix || '';
-  if(reduceMotion){ el.textContent = target + suffix; return; }
+  if(reduceMotion){ el.textContent = prefix + target + suffix; return; }
   const duration = 1400;
   const start = performance.now();
   function tick(now){
     const progress = Math.min((now-start)/duration, 1);
     const eased = 1 - Math.pow(1-progress, 3);
-    el.textContent = Math.floor(eased*target) + suffix;
+    el.textContent = prefix + Math.floor(eased*target) + suffix;
     if(progress < 1) requestAnimationFrame(tick);
-    else el.textContent = target + suffix;
+    else el.textContent = prefix + target + suffix;
   }
   requestAnimationFrame(tick);
 }
