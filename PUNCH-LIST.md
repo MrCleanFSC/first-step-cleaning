@@ -8,63 +8,28 @@ Working list for the 8 upgrades demoed in the "What's Next" showcase. Check item
 
 ## Now (small lift, ship this pass)
 
-### [ ] 1. Interactive before/after slider
-Replace the static side-by-side `.v-pair` before/after cards with a drag-to-reveal slider.
+### [x] 1. Interactive before/after slider — **shipped**
+Replaced the static side-by-side `.v-pair` cards with a drag-to-reveal slider for the two true matched pairs: **stone tile** and **fence** (both in `residential.html`).
 
-- **Touches:** `styles.css` (new `.reveal-slider` component), `main.js` (drag logic), `residential.html`, `about.html`
-- **Real pairs available today:** `tile-before/after.jpg` and `fence-before/after.jpg` in `residential.html` — these are true matched pairs (currently rendered as two side-by-side `<img>`s inside `.v-pair`) and convert cleanly.
-- **Not convertible as-is:** `tub-ba.jpg` and `tile-ba.jpg` are already single pre-composited before/after images, not two separate photos — leave those as-is, or reshoot as pairs later.
-- **Steps:**
-  1. Build one reusable slider component (markup + CSS + JS) — the showcase demo is a working reference implementation.
-  2. Swap the `tile` and `fence` `.v-pair` blocks in `residential.html` for the slider markup.
-  3. Same treatment for the "Our True Visionaries" gallery in `about.html` if it has matched pairs (check current photo set).
+- Reusable `.reveal-slider` component in `styles.css`, drag/keyboard logic in `main.js` (works for any number of sliders on a page, each independent).
+- **Left as-is, on purpose:** `tub-ba.jpg` and `tile-ba.jpg` are pre-composited single images, not separate photos — can't slide without a reshoot.
+- **Also left as-is:** the "Our True Visionaries" pairs on `about.html` (Stacey front/back, JB & Chris front/back) — those are front/back shirt shots, not dirty→clean transformations, so a slider doesn't fit the content. No change made there.
+- Verified: both sliders drag independently, arrow-key nudge works, no console errors.
 
-### [ ] 2. Magnetic CTA buttons
-Subtle cursor-pull + press feedback on primary buttons.
+### [x] 2. Magnetic CTA buttons — **shipped**
+Cursor-pull + press feedback added to every `.btn-primary` site-wide via `main.js`, guarded behind the existing `reduceMotion` flag. `.btn-primary`'s transition in `styles.css` was tightened (`.18s` spring easing) so the pull reads as snappy rather than laggy.
 
-- **Touches:** `main.js` only (styles already exist on `.btn-primary`)
-- **Steps:**
-  1. Add a mousemove/mouseleave handler scoped to `.btn-primary` (or a new `.magnetic` class) that nudges `transform: translate()` toward the cursor within ~100px, springs back on leave.
-  2. Guard the whole thing behind the existing `reduceMotion` flag at the top of `main.js` — it's already there, just reuse it.
-- **Effort:** ~20 lines of JS, no new files.
+### [x] 3. Native scroll-driven reveals — **shipped**
+Added the `@supports (animation-timeline: view())` layer over `.reveal` in `styles.css`. The `IntersectionObserver` in `main.js` is untouched and still runs as the fallback for browsers without support.
 
-### [ ] 3. Native scroll-driven reveals
-Progressive CSS upgrade over the current `IntersectionObserver` reveal system — not a replacement, a fallback-safe layer on top.
+### [x] 4. Cross-document view transitions — **shipped**
+`@view-transition { navigation: auto; }` added near the top of `styles.css` — applies to all 7 pages at once. Also scoped `view-transition-name: site-logo` to the **header** logo only (`#siteHeader .brand-mark`) — it had to be scoped, not applied to `.brand-mark` generally, since the footer logo shares that class and two elements sharing one `view-transition-name` on the same page is invalid and silently kills the transition.
 
-- **Touches:** `styles.css` only
-- **Steps:**
-  1. Add a `@supports (animation-timeline: view())` block that redefines `.reveal` to animate via `animation-timeline: view()` instead of relying purely on the `.in-view` class.
-  2. Leave `main.js`'s `IntersectionObserver` code untouched — it still runs and still adds `.in-view`, which is harmless overlap and serves as the fallback for browsers without support (older Firefox, older Safari).
-- **Effort:** ~6 lines of CSS.
+### [x] 5. Sticky mobile action bar — **shipped**
+Bar is injected by `main.js` into every page (`document.body`), styled in `styles.css` under `@media (max-width: 640px)`. Uses `position: fixed` rather than the originally-planned `sticky` — for a bar appended directly to `<body>`, `fixed` is the reliable choice; `sticky` doesn't behave predictably at that level. Links use the real number from the homepage schema: `tel:+18634404121` / `sms:+18634404121`. "Quote" links to `contact.html#quoteForm`, which jumps straight to the form. Body gets 58px of bottom padding on mobile so the bar never covers content, and it auto-hides while the full-screen mobile nav is open.
 
-### [ ] 4. Cross-document view transitions
-Smooth morph between pages instead of a hard reload, on all 7 pages at once.
-
-- **Touches:** `styles.css` only (shared across every page)
-- **Steps:**
-  1. Add `@view-transition { navigation: auto; }` near the top of `styles.css`.
-  2. Optionally add `view-transition-name: site-logo` to `.brand-mark` so the logo morphs in place across pages instead of just cross-fading.
-- **Effort:** one line to start. This is the cheapest item on the whole list for the impact it has.
-- **Note:** Chrome/Edge 126+ and Safari 18.2+ animate it; everything else just does a normal navigation — no fallback code needed, it degrades safely on its own.
-
-### [ ] 5. Sticky mobile action bar
-Persistent Call / Text / Quote bar in thumb reach on mobile.
-
-- **Touches:** `main.js` (inject the bar markup on load — one change, applies to all 7 pages automatically since `main.js` is already loaded everywhere) + `styles.css` (bar styles, `@media (max-width: 640px)`)
-- **Steps:**
-  1. In `main.js`, append the bar's HTML to `document.body` on load, hidden above `640px` via CSS.
-  2. Style as `position: sticky; bottom: 0;` matching `.btn-primary` gold for the Quote action.
-- **`NEEDS FROM YOU`:** the phone number to use for `tel:` and `sms:` links — homepage schema already lists **(863) 440-4121**, confirm that's the one to expose publicly for one-tap dialing (it already is, on the contact page).
-
-### [ ] 6. Extend structured data to the other 6 pages
-**Smaller than the showcase implied** — `index.html` already has a solid `LocalBusiness`/`HomeAndConstructionBusiness` JSON-LD block with real name, phone, email, address (Lakeland, FL), founder, and a 6-item offer catalog. It's just missing from `about.html`, `services.html`, `residential.html`, `work.html`, `contact.html`, and `legal.html`.
-
-- **Touches:** `<head>` of the 6 pages missing it
-- **Steps:**
-  1. Copy the existing JSON-LD block from `index.html` into the other 5 content pages (skip `legal.html`, low value there).
-  2. On `services.html`, expand `hasOfferCatalog` to the full 6 services already listed on that page (Post-Construction Cleanup, Unit Turnover Cleaning, Amenity & Common Area Detailing, Office & Commercial Cleanout, Punch-List & Touch-Up Cleaning, Move-In Ready Certification) — homepage currently lists fewer.
-  3. Consider adding `Service` schema per offering on `services.html` for richer eligibility in AI answers.
-- **Effort:** mostly copy-paste + one expanded list. Low risk, no design impact.
+### [x] 6. Extend structured data to the other 6 pages — **shipped**
+Copied the `LocalBusiness` JSON-LD block from `index.html` into `about.html`, `services.html`, `residential.html`, `work.html`, and `contact.html` (`legal.html` skipped — it's already `noindex`, confirmed in its own `<meta name="robots">`). Also caught and fixed a real gap while doing this: **Pressure Washing** is an actual service on `residential.html` but was missing from the offer catalog entirely — added it everywhere, so the catalog is now 9 services + the free-estimate offer, consistent on every indexed page. Validated: all 6 JSON-LD blocks parse as valid JSON.
 
 ---
 
