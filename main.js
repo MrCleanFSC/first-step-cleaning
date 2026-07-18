@@ -250,60 +250,97 @@ document.querySelectorAll('.reveal-slider').forEach((slider) => {
 
 // ---------- Visionaries spider connector (About page only — no-op elsewhere) ----------
 (function(){
+  const SVG_NS = 'http://www.w3.org/2000/svg';
   const grid = document.querySelector('.v-hub-grid');
   const svg = document.getElementById('visionariesSpider');
-  if(!grid || !svg) return;
+  const plaqueEl = document.getElementById('visionariesPlaque');
+  if(!grid || !svg || !plaqueEl) return;
 
+  // originT = where along the plaque's top edge each line starts (0 = left, 1 = right),
+  // fanned out left-to-right to roughly match each target's real position.
   const LINKS = [
-    {from:'node-founder', to:'photo-stacey-ashley', edge:'left'},
-    {from:'node-keeper', to:'photo-stacey-ashley', edge:'left'},
-    {from:'node-leader', to:'photo-gym-moment', edge:'right'},
-    {from:'node-builders', to:'photo-builders', edge:'bottom'}
+    {to:'name-founder', originT:0.16},
+    {to:'name-keeper', originT:0.34},
+    {to:'name-builders', originT:0.5},
+    {to:'name-leader', originT:0.84}
   ];
+  const CYCLE_MS = 3200;
+  const TRAVEL_FRACTION = 0.72;
+  const SPARKS_PER_LINE = 3;
 
-  function edgeAnchor(rect, gridRect, edge){
-    const x = rect.left - gridRect.left, y = rect.top - gridRect.top;
-    const w = rect.width, h = rect.height;
-    if(edge === 'left') return {x: x, y: y + h/2};
-    if(edge === 'right') return {x: x + w, y: y + h/2};
-    if(edge === 'top') return {x: x + w/2, y: y};
-    return {x: x + w/2, y: y + h};
-  }
-
-  function clipToRect(fromX, fromY, rect, gridRect){
-    const cx = rect.left - gridRect.left + rect.width/2;
-    const cy = rect.top - gridRect.top + rect.height/2;
-    const dx = cx - fromX, dy = cy - fromY;
-    if(!dx && !dy) return {x:cx, y:cy};
-    const scaleX = dx ? (rect.width/2) / Math.abs(dx) : Infinity;
-    const scaleY = dy ? (rect.height/2) / Math.abs(dy) : Infinity;
-    const scale = Math.min(scaleX, scaleY, 1);
-    return {x: fromX + dx*scale, y: fromY + dy*scale};
-  }
+  let spiderEntries = [];
 
   function drawSpider(){
     const gridRect = grid.getBoundingClientRect();
-    if(!gridRect.width || getComputedStyle(svg).display === 'none') return;
+    if(!gridRect.width || getComputedStyle(svg).display === 'none'){ spiderEntries = []; return; }
     svg.setAttribute('width', gridRect.width);
     svg.setAttribute('height', gridRect.height);
     svg.innerHTML = '';
-    LINKS.forEach(link => {
-      const fromEl = document.getElementById(link.from);
+    const plaqueRect = plaqueEl.getBoundingClientRect();
+
+    spiderEntries = LINKS.map(link => {
       const toEl = document.getElementById(link.to);
-      if(!fromEl || !toEl) return;
-      const start = edgeAnchor(fromEl.getBoundingClientRect(), gridRect, link.edge);
-      const end = clipToRect(start.x, start.y, toEl.getBoundingClientRect(), gridRect);
-      const midX = (start.x + end.x) / 2;
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', 'M' + start.x + ',' + start.y + ' C ' + midX + ',' + start.y + ' ' + midX + ',' + end.y + ' ' + end.x + ',' + end.y);
+      if(!toEl) return null;
+      const toRect = toEl.getBoundingClientRect();
+      const start = {
+        x: plaqueRect.left - gridRect.left + plaqueRect.width * link.originT,
+        y: plaqueRect.top - gridRect.top
+      };
+      const end = {
+        x: toRect.left - gridRect.left + toRect.width/2,
+        y: toRect.top - gridRect.top + toRect.height/2
+      };
+      const midY = (start.y + end.y) / 2;
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', 'M' + start.x + ',' + start.y + ' C ' + start.x + ',' + midY + ' ' + end.x + ',' + midY + ' ' + end.x + ',' + end.y);
       path.setAttribute('class', 'spider-line');
       svg.appendChild(path);
-      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+
+      const dot = document.createElementNS(SVG_NS, 'circle');
       dot.setAttribute('cx', end.x);
       dot.setAttribute('cy', end.y);
-      dot.setAttribute('r', 3.5);
+      dot.setAttribute('r', 2.5);
       dot.setAttribute('class', 'spider-dot');
       svg.appendChild(dot);
+
+      const length = path.getTotalLength();
+      const sparks = [];
+      if(!reduceMotion){
+        for(let i=0;i<SPARKS_PER_LINE;i++){
+          const spark = document.createElementNS(SVG_NS, 'circle');
+          spark.setAttribute('class', 'spider-spark');
+          spark.setAttribute('r', 2);
+          svg.appendChild(spark);
+          sparks.push({el: spark, phase: i / SPARKS_PER_LINE});
+        }
+      }
+      return {path, length, end, sparks};
+    }).filter(Boolean);
+  }
+
+  function animateSparks(now){
+    requestAnimationFrame(animateSparks);
+    spiderEntries.forEach(entry => {
+      entry.sparks.forEach(spark => {
+        const t = ((now / CYCLE_MS) + spark.phase) % 1;
+        let x, y, opacity;
+        if(t < TRAVEL_FRACTION){
+          const travelT = t / TRAVEL_FRACTION;
+          const pt = entry.path.getPointAtLength(travelT * entry.length);
+          x = pt.x; y = pt.y;
+          opacity = Math.min(1, travelT*5) * Math.min(1, (1-travelT)*3+0.25);
+        } else {
+          const orbitT = (t - TRAVEL_FRACTION) / (1 - TRAVEL_FRACTION);
+          const angle = orbitT * Math.PI * 2;
+          const radius = 8 + Math.sin(orbitT*Math.PI)*3;
+          x = entry.end.x + Math.cos(angle)*radius;
+          y = entry.end.y + Math.sin(angle)*radius*0.7;
+          opacity = 0.55 + Math.sin(orbitT*Math.PI*4)*0.35;
+        }
+        spark.el.setAttribute('cx', x);
+        spark.el.setAttribute('cy', y);
+        spark.el.setAttribute('opacity', Math.max(0, opacity).toFixed(2));
+      });
     });
   }
 
@@ -314,6 +351,7 @@ document.querySelectorAll('.reveal-slider').forEach((slider) => {
     clearTimeout(spiderResizeTimer);
     spiderResizeTimer = setTimeout(drawSpider, 150);
   });
+  if(!reduceMotion) requestAnimationFrame(animateSparks);
 })();
 
 // ---------- Shared form helper ----------
