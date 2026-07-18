@@ -248,6 +248,74 @@ document.querySelectorAll('.reveal-slider').forEach((slider) => {
   });
 });
 
+// ---------- Visionaries spider connector (About page only — no-op elsewhere) ----------
+(function(){
+  const grid = document.querySelector('.v-hub-grid');
+  const svg = document.getElementById('visionariesSpider');
+  if(!grid || !svg) return;
+
+  const LINKS = [
+    {from:'node-founder', to:'photo-stacey-ashley', edge:'left'},
+    {from:'node-keeper', to:'photo-stacey-ashley', edge:'left'},
+    {from:'node-leader', to:'photo-gym-moment', edge:'right'},
+    {from:'node-builders', to:'photo-builders', edge:'bottom'}
+  ];
+
+  function edgeAnchor(rect, gridRect, edge){
+    const x = rect.left - gridRect.left, y = rect.top - gridRect.top;
+    const w = rect.width, h = rect.height;
+    if(edge === 'left') return {x: x, y: y + h/2};
+    if(edge === 'right') return {x: x + w, y: y + h/2};
+    if(edge === 'top') return {x: x + w/2, y: y};
+    return {x: x + w/2, y: y + h};
+  }
+
+  function clipToRect(fromX, fromY, rect, gridRect){
+    const cx = rect.left - gridRect.left + rect.width/2;
+    const cy = rect.top - gridRect.top + rect.height/2;
+    const dx = cx - fromX, dy = cy - fromY;
+    if(!dx && !dy) return {x:cx, y:cy};
+    const scaleX = dx ? (rect.width/2) / Math.abs(dx) : Infinity;
+    const scaleY = dy ? (rect.height/2) / Math.abs(dy) : Infinity;
+    const scale = Math.min(scaleX, scaleY, 1);
+    return {x: fromX + dx*scale, y: fromY + dy*scale};
+  }
+
+  function drawSpider(){
+    const gridRect = grid.getBoundingClientRect();
+    if(!gridRect.width || getComputedStyle(svg).display === 'none') return;
+    svg.setAttribute('width', gridRect.width);
+    svg.setAttribute('height', gridRect.height);
+    svg.innerHTML = '';
+    LINKS.forEach(link => {
+      const fromEl = document.getElementById(link.from);
+      const toEl = document.getElementById(link.to);
+      if(!fromEl || !toEl) return;
+      const start = edgeAnchor(fromEl.getBoundingClientRect(), gridRect, link.edge);
+      const end = clipToRect(start.x, start.y, toEl.getBoundingClientRect(), gridRect);
+      const midX = (start.x + end.x) / 2;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', 'M' + start.x + ',' + start.y + ' C ' + midX + ',' + start.y + ' ' + midX + ',' + end.y + ' ' + end.x + ',' + end.y);
+      path.setAttribute('class', 'spider-line');
+      svg.appendChild(path);
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', end.x);
+      dot.setAttribute('cy', end.y);
+      dot.setAttribute('r', 3.5);
+      dot.setAttribute('class', 'spider-dot');
+      svg.appendChild(dot);
+    });
+  }
+
+  drawSpider();
+  window.addEventListener('load', drawSpider);
+  let spiderResizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(spiderResizeTimer);
+    spiderResizeTimer = setTimeout(drawSpider, 150);
+  });
+})();
+
 // ---------- Shared form helper ----------
 const encodeFormData = (form) => new URLSearchParams(new FormData(form)).toString();
 
