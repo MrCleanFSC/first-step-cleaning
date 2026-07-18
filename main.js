@@ -251,21 +251,22 @@ document.querySelectorAll('.reveal-slider').forEach((slider) => {
 // ---------- Visionaries spider connector (About page only — no-op elsewhere) ----------
 (function(){
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const grid = document.querySelector('.v-hub-grid');
+  const grid = document.querySelector('.v-link-grid');
   const svg = document.getElementById('visionariesSpider');
-  const plaqueEl = document.getElementById('visionariesPlaque');
-  if(!grid || !svg || !plaqueEl) return;
+  if(!grid || !svg) return;
 
-  // originT = where along the plaque's top edge each line starts (0 = left, 1 = right),
-  // fanned out left-to-right to roughly match each target's real position.
+  // Each role card sits on the left; the line starts at that card's own right
+  // edge and runs to the matching highlighted name on the right. Builders has
+  // two lines (John and Chris), nudged up/down so they don't start on top of
+  // each other.
   const LINKS = [
-    {to:'name-founder', originT:0.16},
-    {to:'name-keeper', originT:0.34},
-    {to:'name-builders', originT:0.5},
-    {to:'name-leader', originT:0.84}
+    {from:'node-founder', to:'name-founder', fromOffset:0, toYNudge:0},
+    {from:'node-keeper', to:'name-keeper', fromOffset:0, toYNudge:0},
+    {from:'node-leader', to:'name-leader', fromOffset:0, toYNudge:0},
+    {from:'node-builders', to:'name-builders-john', fromOffset:-0.2, toYNudge:-5},
+    {from:'node-builders', to:'name-builders-chris', fromOffset:0.2, toYNudge:5}
   ];
-  const CYCLE_MS = 3200;
-  const TRAVEL_FRACTION = 0.72;
+  const CYCLE_MS = 2600;
   const SPARKS_PER_LINE = 3;
 
   let spiderEntries = [];
@@ -276,32 +277,32 @@ document.querySelectorAll('.reveal-slider').forEach((slider) => {
     svg.setAttribute('width', gridRect.width);
     svg.setAttribute('height', gridRect.height);
     svg.innerHTML = '';
-    const plaqueRect = plaqueEl.getBoundingClientRect();
 
     spiderEntries = LINKS.map(link => {
+      const fromEl = document.getElementById(link.from);
       const toEl = document.getElementById(link.to);
-      if(!toEl) return null;
+      if(!fromEl || !toEl) return null;
+      const fromRect = fromEl.getBoundingClientRect();
       const toRect = toEl.getBoundingClientRect();
       const start = {
-        x: plaqueRect.left - gridRect.left + plaqueRect.width * link.originT,
-        y: plaqueRect.top - gridRect.top
+        x: fromRect.right - gridRect.left,
+        y: fromRect.top - gridRect.top + fromRect.height * (0.5 + link.fromOffset)
       };
       const end = {
         x: toRect.left - gridRect.left + toRect.width/2,
-        y: toRect.top - gridRect.top + toRect.height/2
+        y: toRect.top - gridRect.top + toRect.height/2 + link.toYNudge
       };
-      const midY = (start.y + end.y) / 2;
+      // Every line bends into its target within the SAME fixed horizontal distance
+      // (clamped for short hops), then runs straight the rest of the way. Because
+      // all lines resolve to their final height at the same shared x, and source
+      // order already matches target order top-to-bottom, lines never swap places
+      // mid-flight — which a plain "meet in the middle" bezier can't guarantee
+      // when lines travel very different distances.
+      const bendX = Math.min(start.x + 70, start.x + (end.x - start.x) * 0.9);
       const path = document.createElementNS(SVG_NS, 'path');
-      path.setAttribute('d', 'M' + start.x + ',' + start.y + ' C ' + start.x + ',' + midY + ' ' + end.x + ',' + midY + ' ' + end.x + ',' + end.y);
+      path.setAttribute('d', 'M' + start.x + ',' + start.y + ' C ' + (start.x + (bendX-start.x)*0.6) + ',' + start.y + ' ' + bendX + ',' + end.y + ' ' + bendX + ',' + end.y + ' L ' + end.x + ',' + end.y);
       path.setAttribute('class', 'spider-line');
       svg.appendChild(path);
-
-      const dot = document.createElementNS(SVG_NS, 'circle');
-      dot.setAttribute('cx', end.x);
-      dot.setAttribute('cy', end.y);
-      dot.setAttribute('r', 2.5);
-      dot.setAttribute('class', 'spider-dot');
-      svg.appendChild(dot);
 
       const length = path.getTotalLength();
       const sparks = [];
@@ -314,31 +315,22 @@ document.querySelectorAll('.reveal-slider').forEach((slider) => {
           sparks.push({el: spark, phase: i / SPARKS_PER_LINE});
         }
       }
-      return {path, length, end, sparks};
+      return {path, length, sparks};
     }).filter(Boolean);
   }
 
+  // Sparks simply travel from the role card to the name and fade out on arrival —
+  // the constant twinkle *around* the name itself comes from the .name-sparkle-zone
+  // particle-field canvas (same mechanism as the BUT GOD. bling), not from these.
   function animateSparks(now){
     requestAnimationFrame(animateSparks);
     spiderEntries.forEach(entry => {
       entry.sparks.forEach(spark => {
         const t = ((now / CYCLE_MS) + spark.phase) % 1;
-        let x, y, opacity;
-        if(t < TRAVEL_FRACTION){
-          const travelT = t / TRAVEL_FRACTION;
-          const pt = entry.path.getPointAtLength(travelT * entry.length);
-          x = pt.x; y = pt.y;
-          opacity = Math.min(1, travelT*5) * Math.min(1, (1-travelT)*3+0.25);
-        } else {
-          const orbitT = (t - TRAVEL_FRACTION) / (1 - TRAVEL_FRACTION);
-          const angle = orbitT * Math.PI * 2;
-          const radius = 8 + Math.sin(orbitT*Math.PI)*3;
-          x = entry.end.x + Math.cos(angle)*radius;
-          y = entry.end.y + Math.sin(angle)*radius*0.7;
-          opacity = 0.55 + Math.sin(orbitT*Math.PI*4)*0.35;
-        }
-        spark.el.setAttribute('cx', x);
-        spark.el.setAttribute('cy', y);
+        const pt = entry.path.getPointAtLength(t * entry.length);
+        const opacity = Math.min(1, t*5) * Math.min(1, (1-t)*4);
+        spark.el.setAttribute('cx', pt.x);
+        spark.el.setAttribute('cy', pt.y);
         spark.el.setAttribute('opacity', Math.max(0, opacity).toFixed(2));
       });
     });

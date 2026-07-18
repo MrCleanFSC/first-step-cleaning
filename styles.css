@@ -305,54 +305,59 @@ body.no-scroll{overflow:hidden;}
 .v-item.v-large{grid-column:span 3;}
 .v-item.v-small{grid-column:span 2;}
 
-/* Hub layout for the About page's role plaque + spider connector — scoped with
-   .v-hub-grid so it doesn't touch the plain scrapbook grid reused on residential.html.
-   Plaque sits dead-center, ringed by all five photos: founder/builders/leader across
-   the top, pair/rv below — so it reads as centered to the whole cluster, not just a pair. */
-.visionaries-grid.v-hub-grid{
+/* Role descriptions on the left, photos + captions on the right, each role card
+   aligned to roughly the same row as its matching photo so the connector lines
+   run left-to-right and never have to cross one another. */
+.v-link-grid{
   position:relative;
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) minmax(280px,1.2fr);
   grid-template-areas:
-    "founder founder builders builders leader leader"
-    ".       .       plaque   plaque   .      ."
-    "pair    pair    .        .        rv     rv";
-  row-gap:2.5rem;
+    "roleF photoF"
+    "roleK photoF"
+    "roleL photoL"
+    "roleB photoB";
+  column-gap:3.5rem;
+  row-gap:1.5rem;
   align-items:center;
+  margin-bottom:3rem;
 }
-.v-hub-grid .v-slot-founder{grid-area:founder;}
-.v-hub-grid .v-slot-pair{grid-area:pair;}
-.v-hub-grid .v-slot-plaque{grid-area:plaque;}
-.v-hub-grid .v-slot-leader{grid-area:leader;}
-.v-hub-grid .v-slot-rv{grid-area:rv;}
-.v-hub-grid .v-slot-builders{grid-area:builders;}
-.v-hub-grid .v-item,.v-hub-grid .v-plaque{position:relative;z-index:1;}
-.v-hub-grid .v-jitter{transform:translateY(1.5rem);}
-.v-hub-grid .v-item{max-width:260px;margin-inline:auto;width:100%;}
-.v-hub-grid .v-slot-builders{max-width:300px;}
+.v-link-grid .v-slot-role-founder{grid-area:roleF;}
+.v-link-grid .v-slot-role-keeper{grid-area:roleK;}
+.v-link-grid .v-slot-role-leader{grid-area:roleL;}
+.v-link-grid .v-slot-role-builders{grid-area:roleB;}
+.v-link-grid .v-slot-photo-founder{grid-area:photoF;}
+.v-link-grid .v-slot-photo-leader{grid-area:photoL;}
+.v-link-grid .v-slot-photo-builders{grid-area:photoB;}
+.v-link-grid .v-role-card,.v-link-grid .v-item{position:relative;z-index:1;max-width:none;}
 
-.v-plaque{
+.v-role-card{
   background:linear-gradient(160deg,var(--navy) 0%,#191016 100%);
   border:1px solid rgba(214,66,125,0.32);
-  border-radius:18px;
-  padding:1.4rem 1.3rem;
-  max-width:290px;
-  margin-inline:auto;
-  box-shadow:0 20px 46px rgba(0,0,0,0.4),inset 0 0 0 1px rgba(214,66,125,0.06);
+  border-radius:14px;
+  padding:1.3rem 1.4rem;
+  box-shadow:0 16px 36px rgba(0,0,0,0.38),inset 0 0 0 1px rgba(214,66,125,0.06);
 }
-.v-plaque-role{padding-block:0.75rem;}
-.v-plaque-role:first-child{padding-top:0;}
-.v-plaque-role:last-child{padding-bottom:0;}
-.v-plaque-role + .v-plaque-role{border-top:1px solid var(--line-dark);}
-.v-plaque-role h3{
-  font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--gold-bright);margin-bottom:0.4rem;display:flex;align-items:center;gap:0.5rem;
+.v-role-card h3{
+  font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--gold-bright);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;
 }
-.v-plaque-role h3::before{content:'';width:13px;height:1px;background:var(--gold);flex-shrink:0;}
-.v-plaque-role p{font-size:0.74rem;line-height:1.5;color:var(--mist);font-style:italic;}
+.v-role-card h3::before{content:'';width:14px;height:1px;background:var(--gold);flex-shrink:0;}
+.v-role-card p{font-size:0.82rem;line-height:1.55;color:var(--mist);}
+
+.v-link-grid .v-slot-photo-founder .v-photo,
+.v-link-grid .v-slot-photo-leader .v-photo,
+.v-link-grid .v-slot-photo-builders .v-pair{max-width:340px;margin-left:auto;}
 
 .spider-svg{position:absolute;top:0;left:0;overflow:visible;pointer-events:none;z-index:0;}
 .spider-line{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-dasharray:3 6;opacity:0.5;}
-.spider-dot{fill:var(--gold-bright);}
 .spider-spark{fill:var(--gold-bright);filter:drop-shadow(0 0 3px rgba(232,98,143,0.85));}
+
+/* Inline sparkle zone around a linked name — same particle-field mechanism as
+   the BUT GOD. bling, just without its display:inline-block font styling. */
+.name-sparkle-zone.inline-bling{display:inline-block;padding:0.2rem 0.35rem;margin:0 -0.35rem;vertical-align:middle;}
+
+.v-moments-row{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;}
 
 .v-photo{position:relative;border-radius:8px;overflow:hidden;}
 .v-photo img{width:100%;display:block;}
@@ -516,16 +521,18 @@ footer .brand-mark{width:44px;height:44px;margin-top:0;}
   .footer-grid{grid-template-columns:1fr 1fr;row-gap:2.5rem;}
   .v-item.v-large{grid-column:span 6;}
   .v-item.v-small{grid-column:span 3;}
-  .visionaries-grid.v-hub-grid{grid-template-columns:1fr;grid-template-areas:none;row-gap:2.5rem;}
-  .v-hub-grid .v-slot-founder,
-  .v-hub-grid .v-slot-pair,
-  .v-hub-grid .v-slot-plaque,
-  .v-hub-grid .v-slot-leader,
-  .v-hub-grid .v-slot-rv,
-  .v-hub-grid .v-slot-builders{grid-area:auto;}
-  .v-hub-grid .v-jitter{transform:none;}
-  .v-hub-grid .v-slot-plaque{order:-1;}
-  .v-hub-grid .v-slot-builders{max-width:none;}
+  .v-link-grid{grid-template-columns:1fr;grid-template-areas:none;row-gap:1.75rem;}
+  .v-link-grid .v-slot-role-founder,
+  .v-link-grid .v-slot-role-keeper,
+  .v-link-grid .v-slot-role-leader,
+  .v-link-grid .v-slot-role-builders,
+  .v-link-grid .v-slot-photo-founder,
+  .v-link-grid .v-slot-photo-leader,
+  .v-link-grid .v-slot-photo-builders{grid-area:auto;}
+  .v-link-grid .v-slot-photo-founder .v-photo,
+  .v-link-grid .v-slot-photo-leader .v-photo,
+  .v-link-grid .v-slot-photo-builders .v-pair{max-width:none;margin-inline:auto;}
+  .v-moments-row{grid-template-columns:1fr;}
   .spider-svg{display:none;}
 }
 @media (max-width:860px){
