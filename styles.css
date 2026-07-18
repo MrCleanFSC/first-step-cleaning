@@ -93,7 +93,7 @@ section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-to
   .reveal{
     animation:revealFadeUp linear both;
     animation-timeline:view();
-    animation-range:entry 0% cover 35%;
+    animation-range:entry 0% entry 55%;
   }
 }
 @keyframes revealFadeUp{
@@ -347,12 +347,18 @@ img.scene-visual{width:100%;height:100%;object-fit:cover;display:block;}
 .scene-d .scene-visual{background:linear-gradient(160deg,#2E1526 0%,#0B0D12 55%,#190A15 100%);}
 .scene-e .scene-visual{background:radial-gradient(circle at 75% 15%,#DD5486 0%,#D6427D 15%,#1F0E1A 55%,#0B0D12 100%);}
 .scene-f .scene-visual{background:linear-gradient(150deg,#26303d 0%,#0B0D12 60%,#5C2440 140%);}
+.scene-g .scene-visual{background:linear-gradient(160deg,#2b3340 0%,#0B0D12 55%,#431D38 140%);}
+.scene-h .scene-visual{background:radial-gradient(circle at 25% 80%,#D6427D 0%,#431D38 30%,#0B0D12 70%);}
 .scene-glyph{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;opacity:0.16;}
 .scene-glyph svg{width:46%;height:46%;}
 .scene-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,transparent 55%);}
 .scene-slug{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.5rem;}
 .scene-content h3{font-family:var(--font-body);font-weight:700;font-size:1.05rem;color:#fff;margin-bottom:0.25rem;}
 .scene-content p{font-family:var(--font-mono);font-size:0.72rem;color:rgba(255,255,255,0.7);letter-spacing:0.04em;}
+.scene-cta .scene-visual{background:linear-gradient(160deg,var(--ink) 0%,#2E1526 55%,#5C2440 130%);}
+.scene-cta-content{justify-content:center;background:none;gap:0.6rem;}
+.scene-cta-content h3{font-size:1.3rem;line-height:1.15;}
+.scene-cta-btn{margin-top:0.6rem;padding:0.75rem 1.5rem;font-size:0.7rem;width:fit-content;}
 
 /* ============================= WHY US ============================= */
 .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.75rem 3rem;}
