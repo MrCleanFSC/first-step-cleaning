@@ -388,12 +388,20 @@ img.scene-visual{width:100%;height:100%;object-fit:cover;display:block;}
 .signature-role{display:block;color:var(--mist);font-size:0.72rem;letter-spacing:0.06em;margin-top:0.45rem;text-transform:none;font-family:var(--font-mono);}
 
 /* ============================= TESTIMONIALS ============================= */
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.75rem;}
-.testi-card{background:var(--paper);border:1px solid var(--line-light);padding:2.25rem;border-radius:8px;}
+.testi-split{display:grid;grid-template-columns:1fr auto 1fr;gap:2.5rem;align-items:stretch;}
+.testi-feature{background:var(--paper);border:1px solid var(--line-light);padding:2.5rem;border-radius:8px;display:flex;flex-direction:column;}
 .stars{display:flex;gap:0.25rem;margin-bottom:1.25rem;color:var(--gold);}
 .stars svg{width:16px;height:16px;}
-.testi-card p{font-size:1rem;line-height:1.65;color:#333640;margin-bottom:1.5rem;}
-.testi-attr{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);border-top:1px solid var(--line-light);padding-top:1rem;}
+.testi-feature p{font-size:1rem;line-height:1.7;color:#333640;margin-bottom:1.1rem;}
+.testi-feature p:last-of-type{margin-bottom:1.5rem;}
+.testi-feature p strong{color:var(--gold-deep);font-weight:700;}
+.testi-attr{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--slate);border-top:1px solid var(--line-light);padding-top:1rem;margin-top:auto;}
+.testi-tag{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-deep);background:rgba(214,66,125,0.08);border:1px solid rgba(214,66,125,0.25);padding:0.4rem 0.9rem;border-radius:20px;width:fit-content;margin-bottom:1.75rem;}
+.testi-tag svg{width:15px;height:15px;}
+.testi-split-divider{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.testi-split-line{flex:1;width:2px;min-height:2rem;background:linear-gradient(var(--line-light),var(--gold),var(--line-light));box-shadow:0 0 10px rgba(214,66,125,0.35);}
+.testi-split-badge{flex-shrink:0;width:52px;height:52px;border-radius:50%;background:var(--ink);color:var(--gold);display:flex;align-items:center;justify-content:center;margin-block:1rem;box-shadow:0 0 0 4px var(--cream),0 4px 18px rgba(214,66,125,0.35);}
+.testi-split-badge svg{width:24px;height:24px;}
 
 /* ============================= CONTACT ============================= */
 .contact-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:clamp(2.5rem,6vw,5rem);}
@@ -431,6 +439,8 @@ footer{background:var(--ink);padding-block:clamp(3.5rem,7vw,5.5rem) 2rem;border-
 footer .brand{align-items:center;}
 footer .brand-mark{width:44px;height:44px;margin-top:0;}
 .footer-brand p{color:var(--mist);font-size:0.9rem;line-height:1.65;margin-top:1rem;max-width:280px;}
+.footer-brand p.footer-tagline{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;line-height:1.8;}
+.footer-tagline .dot{color:var(--gold);margin-inline:0.35rem;}
 .footer-col h4{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;}
 .footer-col ul li{margin-bottom:0.7rem;}
 .footer-col a{color:var(--mist);font-size:0.9rem;transition:color .2s;}
@@ -450,7 +460,6 @@ footer .brand-mark{width:44px;height:44px;margin-top:0;}
   .portfolio-grid{grid-template-columns:repeat(2,1fr);}
   .why-grid{grid-template-columns:1fr;}
   .residential-grid{grid-template-columns:repeat(2,1fr);}
-  .testi-grid{grid-template-columns:repeat(2,1fr);}
   .about-grid{grid-template-columns:1fr;}
   .portrait-wrap{margin-inline:auto;}
   .contact-grid{grid-template-columns:1fr;}
@@ -469,7 +478,10 @@ footer .brand-mark{width:44px;height:44px;margin-top:0;}
 @media (max-width:640px){
   .services-grid{grid-template-columns:1fr;}
   .residential-grid{grid-template-columns:1fr;}
-  .testi-grid{grid-template-columns:1fr;}
+  .testi-split{grid-template-columns:1fr;}
+  .testi-split-divider{flex-direction:row;padding-block:0.5rem;}
+  .testi-split-line{width:auto;height:2px;min-height:0;min-width:2rem;background:linear-gradient(to right,var(--line-light),var(--gold),var(--line-light));}
+  .testi-split-badge{margin-block:0;margin-inline:1rem;}
   .visionaries-grid{grid-template-columns:1fr;}
   .v-item{grid-column:span 1 !important;}
   .portfolio-grid{grid-template-columns:1fr;}
