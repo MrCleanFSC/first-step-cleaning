@@ -58,17 +58,10 @@ input,select,textarea{font:inherit;color:inherit;}
   line-height:1.65;
 }
 .light-section .section-lede{color:var(--slate);}
-.section-head{margin-bottom:clamp(2.5rem,6vw,4.5rem);}
-section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-top:100px;}
+.section-head{margin-bottom:clamp(1.5rem,4vw,3rem);}
+section{position:relative;padding-block:clamp(3rem,6vw,5rem);scroll-margin-top:100px;}
 .dark-section{background:var(--ink);color:#EDEEF0;}
 .light-section{background:var(--cream);color:#181A1F;}
-
-/* About page runs tighter than the rest of the site — more sections stacked
-   in sequence, so less breathing room between them keeps it from feeling long.
-   The hero (.page-header) is excluded: its top padding has to clear the fixed
-   site header, which the tightened value doesn't leave room for. */
-body.page-about section:not(.page-header){padding-block:clamp(3rem,6vw,5rem);}
-body.page-about .section-head{margin-bottom:clamp(1.5rem,4vw,3rem);}
 
 /* reveal animation */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,.8,.3,1),transform 0.8s cubic-bezier(.16,.8,.3,1);}
