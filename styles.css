@@ -43,20 +43,6 @@ input,select,textarea{font:inherit;color:inherit;}
 
 /* ============================= LAYOUT UTILITIES ============================= */
 .container{max-width:var(--container);margin-inline:auto;padding-inline:clamp(1.25rem,5vw,3rem);}
-.eyebrow{
-  font-family:var(--font-mono);
-  font-size:0.78rem;
-  letter-spacing:0.28em;
-  text-transform:uppercase;
-  color:var(--gold);
-  display:flex;
-  align-items:center;
-  gap:0.75rem;
-  margin-bottom:1.25rem;
-}
-.eyebrow::before{content:'';width:28px;height:1px;background:var(--gold);}
-.light-section .eyebrow{color:var(--gold-deep);}
-.light-section .eyebrow::before{background:var(--gold-deep);}
 .section-title{
   font-family:var(--font-display);
   font-size:clamp(2.4rem,5vw,4.2rem);
@@ -76,6 +62,13 @@ input,select,textarea{font:inherit;color:inherit;}
 section{position:relative;padding-block:clamp(4.5rem,10vw,8rem);scroll-margin-top:100px;}
 .dark-section{background:var(--ink);color:#EDEEF0;}
 .light-section{background:var(--cream);color:#181A1F;}
+
+/* About page runs tighter than the rest of the site — more sections stacked
+   in sequence, so less breathing room between them keeps it from feeling long.
+   The hero (.page-header) is excluded: its top padding has to clear the fixed
+   site header, which the tightened value doesn't leave room for. */
+body.page-about section:not(.page-header){padding-block:clamp(3rem,6vw,5rem);}
+body.page-about .section-head{margin-bottom:clamp(1.5rem,4vw,3rem);}
 
 /* reveal animation */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s cubic-bezier(.16,.8,.3,1),transform 0.8s cubic-bezier(.16,.8,.3,1);}
@@ -224,8 +217,6 @@ body.no-scroll{overflow:hidden;}
 }
 #hero-particles{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
 .hero-content{flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;position:relative;z-index:3;padding-inline:clamp(1.25rem,5vw,3rem);padding-bottom:clamp(6rem,14vh,7.5rem);max-width:var(--container);margin-inline:auto;width:100%;}
-.hero-eyebrow{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;}
-.hero-eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);}
 .hero h1{
   font-family:var(--font-display);text-transform:uppercase;
   font-size:clamp(3rem,9vw,7.2rem);line-height:0.94;letter-spacing:0.005em;
@@ -250,7 +241,6 @@ body.no-scroll{overflow:hidden;}
   background:radial-gradient(ellipse 55% 75% at 12% 15%,rgba(214,66,125,0.12),transparent 60%),
              radial-gradient(ellipse 50% 70% at 88% 95%,rgba(232,98,143,0.08),transparent 60%);
 }
-.stats-eyebrow{margin-bottom:1.75rem;}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
 .stat{text-align:left;border-left:1px solid var(--line-dark);padding-left:1.5rem;transition:border-color .3s ease,transform .3s ease;}
 .stat:hover{border-color:var(--gold);transform:translateY(-3px);}
@@ -294,6 +284,9 @@ body.no-scroll{overflow:hidden;}
     radial-gradient(ellipse 40% 35% at 90% 80%, rgba(214,66,125,0.05) 0%, transparent 70%);
   pointer-events:none;z-index:0;
 }
+/* Visionary Team (About) and See The Difference (Residential) trade the scrapbook
+   gradient/doodles for a full-height particle sparkle field instead. */
+#visionaryTeam::before,#seeDifference::before{content:none;}
 .v-doodle-layer{
   position:absolute;inset:0;pointer-events:none;z-index:0;
   overflow:hidden;
@@ -307,12 +300,12 @@ body.no-scroll{overflow:hidden;}
 
 /* Mission statement — weaves all four roles into copy that echoes Stacey's own
    voice above, instead of listing each one as a separate definition. */
-.v-mission{max-width:800px;margin-bottom:2.5rem;}
+.v-mission{max-width:800px;margin-bottom:1.75rem;}
 .v-mission p{font-size:1.02rem;line-height:1.7;color:#dcdee3;margin-bottom:1.1rem;}
 .v-mission p:last-child{margin-bottom:0;color:var(--mist);font-style:italic;}
 
 /* Badge legend — the key that ties each icon to a role, read once up top. */
-.v-badge-legend{display:flex;flex-wrap:wrap;gap:1.5rem 2.5rem;padding-bottom:2rem;margin-bottom:2.5rem;border-bottom:1px solid var(--line-dark);}
+.v-badge-legend{display:flex;flex-wrap:wrap;gap:1.5rem 2.5rem;padding-bottom:1.5rem;margin-bottom:1.75rem;border-bottom:1px solid var(--line-dark);}
 .v-badge{display:flex;align-items:center;gap:0.65rem;}
 .v-badge-icon{
   width:38px;height:38px;border-radius:50%;flex-shrink:0;
@@ -345,7 +338,7 @@ body.no-scroll{overflow:hidden;}
    the BUT GOD. bling, just without its display:inline-block font styling. */
 .name-sparkle-zone.inline-bling{display:inline-block;padding:0.2rem 0.35rem;margin:0 -0.35rem;vertical-align:middle;}
 
-.v-moments-row{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:3.5rem;}
+.v-moments-row{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:2.25rem;}
 
 .v-photo{position:relative;border-radius:8px;overflow:hidden;}
 .v-photo img{width:100%;display:block;}
