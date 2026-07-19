@@ -194,6 +194,15 @@ body.no-scroll{overflow:hidden;}
 
 /* ============================= PAGE HEADER (subpages) ============================= */
 .page-header{padding-top:clamp(7.5rem,15vw,10.5rem);padding-bottom:clamp(2.5rem,5vw,3.5rem);}
+/* Same oversized two-tone treatment as the homepage hero's h1, reused on
+   every other page's header so they all read as one family of hero. */
+.hero-title{
+  font-family:var(--font-display);text-transform:uppercase;
+  font-size:clamp(3rem,9vw,7.2rem);line-height:0.94;letter-spacing:0.005em;
+  margin-bottom:1.75rem;
+}
+.hero-title .line-1{display:block;color:#EDEEF0;}
+.hero-title .line-2{display:block;color:var(--gold);}
 
 /* ============================= HERO ============================= */
 .hero{
@@ -221,6 +230,7 @@ body.no-scroll{overflow:hidden;}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:1.1rem;margin-bottom:1rem;}
 .cta-note{font-family:var(--font-mono);font-size:0.76rem;color:var(--mist);letter-spacing:0.03em;margin-bottom:1.75rem;}
 .trust-line{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;color:var(--mist);display:flex;flex-wrap:wrap;gap:0.5rem 0.9rem;text-transform:uppercase;}
+.section-lede + .trust-line{margin-top:1.25rem;}
 .trust-line .dot{color:var(--gold);}
 .scroll-cue{position:absolute;bottom:clamp(28px,4vh,44px);left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:0.6rem;}
 .scroll-cue span{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.28em;color:var(--mist);text-transform:uppercase;}
@@ -269,17 +279,6 @@ body.no-scroll{overflow:hidden;}
 /* ============================= VISIONARIES SCRAPBOOK BG DOODLES ============================= */
 .visionaries-section{position:relative;overflow:hidden;}
 .visionaries-section .container{position:relative;z-index:1;}
-.visionaries-section::before{
-  content:'';
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 50% 40% at 10% 15%, rgba(214,66,125,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 35% at 90% 80%, rgba(214,66,125,0.05) 0%, transparent 70%);
-  pointer-events:none;z-index:0;
-}
-/* Visionary Team (About) and See The Difference (Residential) trade the scrapbook
-   gradient/doodles for a full-height particle sparkle field instead. */
-#visionaryTeam::before,#seeDifference::before{content:none;}
 .v-doodle-layer{
   position:absolute;inset:0;pointer-events:none;z-index:0;
   overflow:hidden;
@@ -396,7 +395,23 @@ img.scene-visual{width:100%;height:100%;object-fit:cover;display:block;}
 .why-item h3{font-size:1.05rem;font-weight:700;margin-bottom:0.4rem;}
 .why-item p{color:var(--slate);font-size:0.92rem;line-height:1.6;}
 
+/* Shared atmospheric glow — same rose radial-gradient wash used behind the
+   homepage hero, reused on every other dark content section. background-attachment:fixed
+   pins the gradient to the viewport rather than each section's own box, so it reads as
+   one continuous backdrop showing through as you scroll instead of a pattern that
+   visibly resets at every section boundary. */
+.section-glow::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 55% at 22% 18%,rgba(232,98,143,0.16),transparent 60%),
+             radial-gradient(ellipse 80% 60% at 80% 90%,rgba(214,66,125,0.08),transparent 60%);
+  background-attachment:fixed;
+}
+
 /* ============================= ABOUT ============================= */
+/* Combined hero + bio block — same top clearance as the homepage hero, so
+   the page opens with one unified block instead of a small header followed
+   by a separate section. */
+.about-hero{padding-top:clamp(7.5rem,15vw,10.5rem);}
 .about-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(2.5rem,6vw,5rem);align-items:center;}
 .portrait-wrap{position:relative;aspect-ratio:4/5;max-width:400px;box-shadow:0 0 0 1px rgba(214,66,125,0.5),0 0 26px rgba(232,98,143,0.2);}
 /* Border made of the site's own particle sparkles, masked to a frame-shaped
